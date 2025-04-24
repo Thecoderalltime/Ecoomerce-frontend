@@ -1,21 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchAllOrderAsync, myOrder, selectedUserLoginInfo } from "../userSilce";
+import { fetchAllOrderByUserAsync, myOrder, selectedUserLoginInfo } from "../userSilce";
 import Navbar from "../../Navbar/Navbar";
 
 const MyOrder = () => {
   const order = useSelector(myOrder);
   const user = useSelector(selectedUserLoginInfo);
   const dispatch = useDispatch();
-  console.log(order)
-  order.map((order, i) =>{
-    console.log(order.selectedAddresss);
-  })
+ 
   
   // it will be working on apps because user not stay in longing state
   useEffect(() => {
-    dispatch(fetchAllOrderAsync(user.id));
+    dispatch(fetchAllOrderByUserAsync(user.id));
   }, [dispatch, user]);
   return (
     <>
@@ -47,7 +44,7 @@ const MyOrder = () => {
                     <li className="flex py-6">
                       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                         <img
-                          src={item.images}
+                          src={item.product.thumbnail}
                           alt=""
                           className="h-full w-full object-cover object-center"
                         />
@@ -57,12 +54,12 @@ const MyOrder = () => {
                         <div>
                           <div className="flex justify-between text-base font-medium text-gray-900">
                             <div>
-                              <h3 className=" text-xl ">{item.title}</h3>
-                              <p className="text-gray-500 "> {item.brand}</p>
+                              <h3 className=" text-xl ">{item.product.title}</h3>
+                              <p className="text-gray-500 text-sm ">Brand :  {item.product.brand}</p>
                             </div>
-                            <h3 className="ml-4 text-xl ">$ {item.price}</h3>
+                            <h3 className="ml-4 text-xl ">$ {item.product.price}</h3>
                           </div>
-                          <p className="mt-1 text-sm text-gray-500"></p>
+                          {/* <p className="mt-1 text-sm text-gray-500"> Category : {item.product.category}</p> */}
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
                           <div className="text-gray-500">
@@ -70,9 +67,9 @@ const MyOrder = () => {
                               htmlFor="quantity"
                               className="inline mr-5 text-sm font-medium leading-6 text-gray-900"
                             >
-                              Qty :{item.quantity}
+                              Qty : {item.quantity}
                             </label>
-                            <h3 className="font-medium">
+                            <h3 className="font-medium text-sm">
                               Order Status :{" "}
                               <span className="text-red-500 font-bold border-none">
                                 {order.status}

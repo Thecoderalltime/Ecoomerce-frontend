@@ -18,9 +18,10 @@ const {
 } = useForm();
 
 const dispatch = useDispatch()
-const error = useSelector(loginUserError);
+const userError = useSelector(loginUserError);
 const user = useSelector(loginUser)
 
+const error = userError?.message
 
  const onSubmitFrom =(data) => {
   dispatch(checkUserAsync({email:data.email, password:data.password }))
@@ -111,7 +112,8 @@ const user = useSelector(loginUser)
                   {" "}
                   {errors.password?.message}{" "}
                 </span>
-               
+                
+             <span className=" text-red-600 ">{error}</span>
               </div>
             </div>
 

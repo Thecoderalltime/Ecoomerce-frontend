@@ -10,8 +10,8 @@ import {
 export const addItemsAsync = createAsyncThunk(
   "addTocart/addItemsAsync",
   async (item) => {
-    const data = await addCartItem(item);
-    return data;
+    const response = await addCartItem(item);
+    return response.data;
   }
 );
 
@@ -56,13 +56,13 @@ const addToCartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addItemsAsync.fulfilled, (state, action) => {
-        state.items = [...state.items, action.payload];
-      })
       // .addCase(addItemsAsync.fulfilled, (state, action) => {
-      //   state.items.push(action.payload);
-      //   state.isLoading = false;
+      //   state.items = [...state.items, action.payload];
       // })
+      .addCase(addItemsAsync.fulfilled, (state, action) => {
+        state.items.push(action.payload);
+        state.isLoading = false;
+      })
       .addCase(addItemsAsync.pending, (state, action) => {
         state.isLoading = true;
       })

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
-  cartItem,
   deleteItemFormCartAsync,
   updateCartItemByCartIdAsync,
 } from "../Cart/CartSlice";
@@ -11,16 +10,15 @@ import { useEffect, useState } from "react";
 import { sleletedUser, updateUserAsync } from "../auth/authSlice";
 import { createOrderAsync } from "../Order/orderSlice";
 const CheckOutPage = () => {
-  const item = useSelector((state)=>state.cart.items);
+  const item = useSelector((state) => state.cart.items);
   const user = useSelector(sleletedUser);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [payment, setPayment] = useState("cash");
   const currentOrder = useSelector((state) => state.order.currentOrder);
 
-  console.log("Current Order from Redux:", currentOrder);
-  console.log("Current items from Redux:", item);
+  
   const totalAmount = item.reduce(
-    (amount, item) => item.price * item.quantity + amount,
+    (amount, item) => item.product.price * item.quantity + amount,
     0
   );
   const totalItems = item.reduce((total, item) => item.quantity + total, 0);
@@ -29,7 +27,7 @@ const CheckOutPage = () => {
 
   const handleQuantity = (e, item) => {
     dispath(
-      updateCartItemByCartIdAsync({ ...item, quantity: +e.target.value })
+      updateCartItemByCartIdAsync({id:item.id, quantity: +e.target.value })
     );
   };
 
@@ -61,7 +59,7 @@ const CheckOutPage = () => {
   const handleOrder = (e) => {
     if (selectedAddress && payment) {
       const order = {
-        user,
+       user:user.id,
         item,
         totalAmount,
         totalItems,
@@ -69,7 +67,7 @@ const CheckOutPage = () => {
         payment,
         status: "pending",
       };
-      console.log(item);
+      
       dispath(createOrderAsync(order));
     } else {
       alert("Please fill the address and select payment method");
@@ -77,14 +75,15 @@ const CheckOutPage = () => {
   };
 
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-   useEffect(() => {
-     if (item && Array.isArray(item) && item.length === 0) {
-       navigate("/", { replace: true });
-     }
-   }, [item, navigate]);
- 
+  useEffect(() => {
+    if (item && Array.isArray(item) && item.length === 0) {
+      navigate("/", { replace: true });
+    }
+  }, [item, navigate]);
+
+  
   return (
     <>
       {currentOrder && (
@@ -326,56 +325,56 @@ const CheckOutPage = () => {
                   >
                     {user
                       ? user?.address.map((address, index) => (
-                          <li
-                            key={index}
-                            className="flex justify-between gap-x-6 py-5"
-                          >
-                            <div className="flex min-w-0 gap-x-4">
-                              <input
-                                name="address"
-                                type="radio"
-                                value={index}
-                                onChange={() => handleAdress(index)}
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                              <div className="min-w-0 flex-auto ">
-                                <p className="text-sm/6 font-semibold text-gray-900">
-                                  {address.firstName}
-                                </p>
-                                <p className="mt-1 truncate text-xs/5 text-gray-500">
-                                  {address.email}
-                                </p>
-                                <p className="mt-1 truncate text-xs/5 text-gray-500">
-                                  {address.phone}
+                        <li
+                          key={index}
+                          className="flex justify-between gap-x-6 py-5"
+                        >
+                          <div className="flex min-w-0 gap-x-4">
+                            <input
+                              name="address"
+                              type="radio"
+                              value={index}
+                              onChange={() => handleAdress(index)}
+                              className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            />
+                            <div className="min-w-0 flex-auto ">
+                              <p className="text-sm/6 font-semibold text-gray-900">
+                                {address.firstName}
+                              </p>
+                              <p className="mt-1 truncate text-xs/5 text-gray-500">
+                                {address.email}
+                              </p>
+                              <p className="mt-1 truncate text-xs/5 text-gray-500">
+                                {address.phone}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                            <p className="text-sm/6 text-gray-900">
+                              {address.postCode}
+                            </p>
+                            {address.phone ? (
+                              <p className="mt-1 text-xs/5 text-gray-500">
+                                Last seen{" "}
+                                <time dateTime={address?.lastSeenDateTime}>
+                                  {address?.lastSeen}
+                                </time>
+                              </p>
+                            ) : (
+                              <div className="mt-1 flex items-center gap-x-1.5">
+                                <div className="flex-none rounded-full bg-emerald-500/20 p-1">
+                                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                </div>
+                                <p className="text-xs/5 text-gray-500">
+                                  Online
                                 </p>
                               </div>
-                            </div>
-                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                              <p className="text-sm/6 text-gray-900">
-                                {address.postCode}
-                              </p>
-                              {address.phone ? (
-                                <p className="mt-1 text-xs/5 text-gray-500">
-                                  Last seen{" "}
-                                  <time dateTime={address?.lastSeenDateTime}>
-                                    {address?.lastSeen}
-                                  </time>
-                                </p>
-                              ) : (
-                                <div className="mt-1 flex items-center gap-x-1.5">
-                                  <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                  </div>
-                                  <p className="text-xs/5 text-gray-500">
-                                    Online
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </li>
-                        ))
+                            )}
+                          </div>
+                        </li>
+                      ))
                       : null}
-                    {}
+                    { }
                   </ul>
 
                   <div className="mt-10 space-y-10">
@@ -451,7 +450,7 @@ const CheckOutPage = () => {
                         <li className="flex py-6">
                           <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                             <img
-                              src={item.images}
+                              src={item.product.thumbnail}
                               alt=""
                               className="h-full w-full object-cover object-center"
                             />
@@ -461,17 +460,16 @@ const CheckOutPage = () => {
                             <div>
                               <div className="flex justify-between text-base font-medium text-gray-900">
                                 <div>
-                                  <h3 className=" text-lg ">{item.title}</h3>
-                                  <p className="text-gray-500 ">
-                                    {" "}
-                                    {item.brand}
-                                  </p>
+                                  <h3 className=" text-lg ">{item.product.title}</h3>
+                                  <p className=""> Brand : <span className="text-sm text-gray-600">{item.product.brand}</span></p>
+
                                 </div>
                                 <h3 className="ml-4 text-xl ">
-                                  $ {item.price}
+                                  $ {item.product.price}
                                 </h3>
                               </div>
-                              <p className="mt-1 text-sm text-gray-500"></p>
+                              <p className=""> Category : <span className="text-sm text-gray-600">{item.product.category}</span></p>
+
                             </div>
                             <div className="flex flex-1 items-end justify-between text-sm">
                               <div className="text-gray-500">

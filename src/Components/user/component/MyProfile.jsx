@@ -7,6 +7,7 @@ import {
   updateUserAsync,
 } from "../userSilce";
 import { useForm } from "react-hook-form";
+import { Navigate } from "react-router-dom";
 
 const MyProfile = () => {
   const user = useSelector(selectedUserLoginInfo);
@@ -37,12 +38,12 @@ const MyProfile = () => {
   };
 
   const handleRemove = (e, index) => {
-    const newUser = { ...user, address: [...user.address] };
+    const newUser = { user:user.id,...user, address: [...user.address] };
     newUser.address.splice(index, 1);
     dispatch(updateUserAsync(newUser));
   };
   const handleEditFormUpdate = (data, index) => {
-    const newUser = { ...user, address: [...user.address] };
+    const newUser = {user:user.id,...user, address: [...user.address] };
     newUser.address.splice(index, 1, data);
     dispatch(updateUserAsync(newUser));
     setEditFormOpen(false);
@@ -55,19 +56,26 @@ const MyProfile = () => {
 
   const handleAddAdress = (data) => {
     setValue("");
-    const newUser = { ...user, address: [...user.address, data] };
+    const newUser = {...user, address: [...user.address, data] };
     dispatch(updateUserAsync(newUser));
     setAddFormOpen(false);
   };
+
+
+  
+  
+  
   return (
     <Navbar>
+      {!user  && <Navigate to={"/"} replace={true}></Navigate>}
+
       <ul role="list" className="px-5">
         <div className="   p-4">
           <h2 className="text-base/7 font-semibold text-gray-900">
             Personal Information
           </h2>
           <h4 className="text-gray-900">Email : {user && user.email}</h4>
-          <h5 className="text-gray-900"> role : {user && user.role}</h5>
+          <h5 className="text-gray-900"> role : {user ?user?.role:null}</h5>
           <button
             onClick={addAddressForm}
             className="rounded-md bg-green-600 px-3 mt-12 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"

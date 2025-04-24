@@ -1,14 +1,14 @@
-export const fetchAllProducts = () => {
-    return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:5050/products')
-        const data = await response.json();
-        resolve({ data });
-    })
-}
+// export const fetchAllProducts = () => {
+//     return new Promise(async (resolve) => {
+//         const response = await fetch('http://localhost:50500/products')
+//         const data = await response.json();
+//         resolve({ data });
+//     })
+// }
 
 export const createProduct = (product) => {
     return new Promise(async (resolve, reject) => {
-        const response = await fetch('http://localhost:5050/products',
+        const response = await fetch('http://localhost:5000/api/products',
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -25,7 +25,7 @@ export const updateProductById = (product) => {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await fetch(
-               `http://localhost:5050/products/${product.id}`,
+               `http://localhost:5000/api/products/${product.id}`,
                 {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
@@ -46,7 +46,7 @@ export const updateProductById = (product) => {
 
 export const fetchCetegory = () => {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:5050/categories')
+        const response = await fetch('http://localhost:5000/api/categories')
         const data = await response.json();
         resolve({ data });
     })
@@ -54,7 +54,7 @@ export const fetchCetegory = () => {
 
 export const fetchBrands = () => {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:5050/brands')
+        const response = await fetch('http://localhost:5000/api/brands')
         const data = await response.json();
         resolve({ data });
     })
@@ -62,7 +62,7 @@ export const fetchBrands = () => {
 
 export const getProductById = (id) => {
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:5050/products/' + id)
+        const response = await fetch('http://localhost:5000/api/products/' + id)
         const data = await response.json();
         resolve({ data });
     })
@@ -91,7 +91,7 @@ export const getProductsByFilters = (filter, sort, pagination) => {
     }
 
     return new Promise(async (resolve) => {
-        const response = await fetch('http://localhost:5050/products?' + queryString);
+        const response = await fetch('http://localhost:5000/api/products?' + queryString);
         const data = await response.json();
         const totalItems = response.headers.get('X-Total-Count')
         resolve({data:{products:data, totalItems:totalItems}});

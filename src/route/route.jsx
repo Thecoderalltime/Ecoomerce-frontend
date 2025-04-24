@@ -13,7 +13,7 @@ import MyProfile from "../Components/user/component/MyProfile";
 import OrderSuccessPage from "../Components/Order/OrderSuccessPage";
 import LogoutPage from "../Pages/LoginPage/LogoutPage";
 import ForgotPassword from "../Pages/LoginPage/ForgotPassword";
-import AdminProtect from "./adminProtect";
+import AdminProtect from "./AdminProtect";
 import AdminHomePage from "../Pages/AdminHonePage";
 import AdminProductDetails from "../Components/admin/component/AdminProductDetails";
 import AddProductFrom from "../Components/admin/component/AddProductFrom";

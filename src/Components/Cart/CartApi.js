@@ -3,19 +3,23 @@ import { cartItem } from "./CartSlice";
 //  for set add to item in api
 export const addCartItem = (item) => {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch("http://localhost:5050/cart", {
+    const response = await fetch("http://localhost:5000/api/cart",{
       method: "POST",
       body: JSON.stringify(item),
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" }
+,
     });
     const data = await response.json();
+    console.log(data)
     resolve({ data });
   });
 };
+
+
 // get all cartItem form bd
 export const getCatItemsById = (uerId) => {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch("http://localhost:5050/cart?user=" + uerId);
+    const response = await fetch("http://localhost:5000/api/cart?user=" + uerId);
     const data = await response.json();
     resolve({ data });
   });
@@ -26,7 +30,7 @@ export const updateCartItemByCartId = (updateData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await fetch(
-        `http://localhost:5050/cart/` + updateData.id,
+        `http://localhost:5000/api/cart/${updateData.id}` ,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -49,7 +53,7 @@ export const updateCartItemByCartId = (updateData) => {
 export const deleteItemFormCart = (cartId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await fetch("http://localhost:5050/cart/" +cartId, {
+      const response = await fetch(`http://localhost:5000/api/cart/${cartId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });

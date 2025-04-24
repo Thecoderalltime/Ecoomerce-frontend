@@ -13,9 +13,10 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { cartItem } from "../Cart/CartSlice";
 import { sleletedUser } from "../auth/authSlice";
+import logo from "../../assets/logo.png"
 
 
 const navigation = [
@@ -39,7 +40,7 @@ function classNames(...classes) {
 const Navbar = ({ children }) => {
   const item = useSelector(cartItem);
   const user = useSelector(sleletedUser);
-  
+
 
   return (
     <div className="min-h-full">
@@ -51,7 +52,7 @@ const Navbar = ({ children }) => {
                 <div className="shrink-0">
                   <img
                     alt="Your Company"
-                    src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                    src={logo}
                     className="h-8 w-8"
                   />
                 </div>
@@ -60,7 +61,7 @@ const Navbar = ({ children }) => {
                 <div className="ml-10 flex items-baseline space-x-4">
                   {navigation.map(
                     (item) =>
-                      item[user.role] && (
+                      item[user?.role] && (
                         <Link
                           key={item.name}
                           to={item.link}
@@ -106,7 +107,7 @@ const Navbar = ({ children }) => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         alt=""
-                        src={user.imageUrl}
+                        src={user?.imageUrl}
                         className="h-8 w-8 rounded-full"
                       />
                     </MenuButton>
@@ -171,16 +172,16 @@ const Navbar = ({ children }) => {
               <div className="shrink-0">
                 <img
                   alt=""
-                  src={user.imageUrl}
+                  src={user?.imageUrl}
                   className="h-10 w-10 rounded-full"
                 />
               </div>
               <div className="ml-3">
                 <div className="text-base/5 font-medium text-white">
-                  {user.name}
+                  {user?.name}
                 </div>
                 <div className="text-sm font-medium text-gray-400">
-                  {user.email}
+                  {user?.email}
                 </div>
               </div>
               <Link to="/cart">
@@ -200,12 +201,12 @@ const Navbar = ({ children }) => {
             <div className="mt-3 space-y-1 px-2">
               {userNavigation.map((item) => (
                 <DisclosureButton
-                  key={item.name}
+                  key={item?.name}
                   as="a"
-                  href={item.href}
+                  href={item?.href}
                   className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                 >
-                  {item.name}
+                  {item?.name}
                 </DisclosureButton>
               ))}
             </div>

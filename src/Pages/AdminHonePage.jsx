@@ -1,11 +1,13 @@
 import Navbar from "../Components/Navbar/Navbar";
-import AdminCetegoryPa from "../Components/admin/component/AdminCetegoryPage";
+import AdminCetegoryPage from "../Components/admin/component/AdminCetegoryPage";
+import Footer from "../Components/footer/Footer";
 
 const AdminHonePage = () => {
   console.log("AdminHonePage");
   return (
     <Navbar>
-      <AdminCetegoryPa />
+      <AdminCetegoryPage />
+      <Footer/>
     </Navbar>
   );
 };

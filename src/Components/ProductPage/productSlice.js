@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createProduct,
-  fetchAllProducts,
   fetchBrands,
   fetchCetegory,
   getProductById,

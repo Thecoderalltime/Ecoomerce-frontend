@@ -1,9 +1,9 @@
 export const createUser = (userInfo) => {
     return new Promise(async (resolve, reject) => {
-        const response = await fetch("http://localhost:5050/users", {
+        const response = await fetch("http://localhost:5000/api/users", {
             method: "POST",
             body: JSON.stringify(userInfo),
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" }
 
         });
 
@@ -17,24 +17,31 @@ export const createUser = (userInfo) => {
 
 export const checkUser = (userInfo) => {
     return new Promise(async (resolve, reject) => {
-        const email = userInfo.email
-        const password = userInfo.password
-        const response = await fetch("http://localhost:5050/users?email=" + email);
-        const data = await response.json();
-        
-        if (data.length) {
-            if (password === data[0].password) {
-                resolve({ data: data[0] })
+        try {
+            const response = await fetch("http://localhost:5000/api/login", {
+                method: "POST",
+                body: JSON.stringify(userInfo),
+                headers: { "Content-Type": "application/json" },
+
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                resolve({ data });
             } else {
-                reject({ message: "Wrong password" })
+                const error = await response.json();
+                reject(error )
             }
-        } else
-            reject({ message: "User not found" })
+
+        } catch (error) {
+            reject( error )
+        }
+
     });
 };
 
 export const logoutUser = () => {
-    return new Promise(async (resolve, reject) => { 
-        resolve({ data :"User successfully logout" });
+    return new Promise(async (resolve, reject) => {
+        resolve({ data: "User successfully logout" });
     });
 };

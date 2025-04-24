@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchAllOrder, fetchLoginInfo, updateUser } from "./userApi";
 
 
-export const fetchAllOrderAsync = createAsyncThunk(
-    "order/fetchAllOrderAsync",
+export const fetchAllOrderByUserAsync = createAsyncThunk(
+    "order/fetchAllOrderByUserAsync",
     async (userId) => {
     const response = await fetchAllOrder(userId);
     return response.data;
@@ -20,9 +20,8 @@ export const fetchAllOrderAsync = createAsyncThunk(
 export const updateUserAsync = createAsyncThunk(
     "user/updateUserAsync",
     async (userId) => {
+        console.log(userId)
         const response = await updateUser(userId)
-        // const data = await response.json();
-        // return { data };
         return response.data;
     })
 
@@ -42,9 +41,10 @@ const myOrderSlice = createSlice({
 
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllOrderAsync.pending, (state) => {
+            .addCase(fetchAllOrderByUserAsync.pending, (state) => {
                 state.isLoading = true;
-            }).addCase(fetchAllOrderAsync.fulfilled, (state, action) => {
+            })
+            .addCase(fetchAllOrderByUserAsync.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.userOrders = action.payload;
             })

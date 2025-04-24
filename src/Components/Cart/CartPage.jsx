@@ -12,14 +12,14 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const totalAmount = item.reduce(
-    (amount, item) => item.price * item.quantity + amount,
+    (amount, item) => item.product?.price * item.quantity + amount,
     0
   );
   const totalItems = item.reduce((total, item) => item.quantity + total, 0);
 
   const handleQulentity = (e, item) => {
     dispath(
-      updateCartItemByCartIdAsync({ ...item, quantity: +e.target.value })
+      updateCartItemByCartIdAsync({ id: item.id, quantity: +e.target.value })
     );
   };
 
@@ -40,7 +40,7 @@ const CartPage = () => {
           <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
             Cart
           </h1>
-          {item.map((item, index) => (
+          {item?.map((item, index) => (
             <div
               key={index}
               className="flow-root border-gray-200 px-4 py-6 sm:px-6"
@@ -61,7 +61,7 @@ const CartPage = () => {
                 <li className="flex py-6">
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                     <img
-                      src={item.images}
+                      src={item.product?.thumbnail}
                       alt=""
                       className="h-full w-full object-cover object-center"
                     />
@@ -71,22 +71,23 @@ const CartPage = () => {
                     <div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <div>
-                          <h3 className=" text-xl ">{item.title}</h3>
-                          <p className="text-gray-500 "> {item.brand}</p>
+                          <h3 className=" text-xl ">{item.product?.title}</h3>
+
+                          <p className=""> Brand : <span className="text-sm text-gray-600">{item.product?.brand}</span></p>
                         </div>
-                        <h3 className="ml-4 text-xl ">$ {item.price}</h3>
+                        <h3 className="ml-4 text-xl ">$ {item.product?.price}</h3>
                       </div>
-                      <p className="mt-1 text-sm text-gray-500"></p>
+                      <p className=""> Category : <span className="text-sm text-gray-600">{item.product?.category}</span></p>
                     </div>
                     <div className="flex flex-1 items-end justify-between text-sm">
-                      <div className="text-gray-500">
+                      <div className="text-gray-500 ">
                         <label
                           htmlFor="quantity"
-                          className="inline mr-5 text-sm font-medium leading-6 text-gray-900"
+                          className="inline mr-5 text-sm leading-6 text-gray-900"
                         >
                           Qty
                         </label>
-                        <select
+                        <select className="border mt-2"
                           onChange={(e) => handleQulentity(e, item)}
                           value={item.quantity}
                         >
